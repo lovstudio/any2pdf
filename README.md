@@ -23,9 +23,7 @@ The skill teaches your AI assistant an **interactive workflow**, not just a CLI 
 ```
 You: "把这个报告转成PDF"
 
-Agent: asks about frontispiece image (skip / local / AI-generate)
-Agent: asks about watermark ("DRAFT"? "内部资料"?)
-Agent: asks about back cover (QR code? business card?)
+Agent: asks about design style, frontispiece, watermark, back cover
 Agent: runs the conversion with all your choices
 ```
 
@@ -59,6 +57,73 @@ npx skills add lovstudio/md2pdf -g -y
 
 Works with 25+ AI agents: Claude Code, Cursor, GitHub Copilot, Gemini CLI, Codex, Cline, Warp, and more.
 
+## Design Styles
+
+10 built-in themes — from classic LaTeX-inspired to modern minimalist. Click to preview.
+
+<table>
+<tr>
+<td align="center" width="50%">
+<strong>Warm Academic</strong><br>
+<sub>陶土色调，温润典雅 · 人文/社科报告</sub><br>
+<img src="previews/warm-academic.png" width="400">
+</td>
+<td align="center" width="50%">
+<strong>Classic Thesis</strong><br>
+<sub>灵感源自 LaTeX classicthesis · 学术论文</sub><br>
+<img src="previews/classic-thesis.png" width="400">
+</td>
+</tr>
+<tr>
+<td align="center">
+<strong>Tufte</strong><br>
+<sub>极简留白，深红点缀 · 数据叙事/技术写作</sub><br>
+<img src="previews/tufte.png" width="400">
+</td>
+<td align="center">
+<strong>IEEE Journal</strong><br>
+<sub>藏蓝严谨 · 正式发表/期刊风格</sub><br>
+<img src="previews/ieee-journal.png" width="400">
+</td>
+</tr>
+<tr>
+<td align="center">
+<strong>Elegant Book</strong><br>
+<sub>灵感源自 LaTeX ElegantBook · 长篇专著</sub><br>
+<img src="previews/elegant-book.png" width="400">
+</td>
+<td align="center">
+<strong>Chinese Red</strong><br>
+<sub>朱红配暖纸 · 中文正式报告/白皮书</sub><br>
+<img src="previews/chinese-red.png" width="400">
+</td>
+</tr>
+<tr>
+<td align="center">
+<strong>Ink Wash</strong><br>
+<sub>水墨风，纯灰黑素雅 · 文学/设计类</sub><br>
+<img src="previews/ink-wash.png" width="400">
+</td>
+<td align="center">
+<strong>GitHub Light</strong><br>
+<sub>蓝白极简 · 程序员熟悉的风格</sub><br>
+<img src="previews/github-light.png" width="400">
+</td>
+</tr>
+<tr>
+<td align="center">
+<strong>Nord Frost</strong><br>
+<sub>蓝灰北欧风 · 清爽现代</sub><br>
+<img src="previews/nord-frost.png" width="400">
+</td>
+<td align="center">
+<strong>Ocean Breeze</strong><br>
+<sub>青绿色调 · 清新自然</sub><br>
+<img src="previews/ocean-breeze.png" width="400">
+</td>
+</tr>
+</table>
+
 ## What You Get
 
 - **Cover page** with title, subtitle, author, version, stats lines
@@ -68,18 +133,7 @@ Works with 25+ AI agents: Claude Code, Cursor, GitHub Copilot, Gemini CLI, Codex
 - **Running footers** — author/brand, page number, date
 - **Watermark** — faint diagonal text on every content page
 - **Back cover** — banner image or text branding (QR codes, business cards)
-- **6 color themes** — from warm academic to GitHub-clean
-
-## Themes
-
-| Theme | Vibe |
-|-------|------|
-| `warm-academic` | Terracotta on ivory — scholarly, warm |
-| `nord-frost` | Steel blue on arctic gray — clean, modern |
-| `github-light` | Blue on white — familiar to developers |
-| `solarized-light` | Orange on cream — easy on the eyes |
-| `paper-classic` | Red on white — traditional print |
-| `ocean-breeze` | Teal on seafoam — fresh, calming |
+- **10 design themes** — from warm academic to ink wash minimalist
 
 ## Direct CLI Usage
 
