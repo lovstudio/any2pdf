@@ -54,7 +54,7 @@ Fonts are auto-discovered from system paths. Missing fonts? You get a helpful er
 ## Install
 
 ```bash
-npx skills add lovstudio/md2pdf -g
+npx skills add lovstudio/md2pdf -g -y
 ```
 
 Works with 25+ AI agents: Claude Code, Cursor, GitHub Copilot, Gemini CLI, Codex, Cline, Warp, and more.
@@ -86,7 +86,7 @@ Works with 25+ AI agents: Claude Code, Cursor, GitHub Copilot, Gemini CLI, Codex
 ```bash
 pip install reportlab
 
-python md2pdf/scripts/md2pdf.py \
+python lovstudio-md2pdf/scripts/md2pdf.py \
   --input report.md \
   --output report.pdf \
   --title "My Report" \
@@ -96,7 +96,7 @@ python md2pdf/scripts/md2pdf.py \
   --toc true
 ```
 
-See [SKILL.md](md2pdf/SKILL.md) for the full 20+ argument reference.
+See [SKILL.md](lovstudio-md2pdf/SKILL.md) for the full 20+ argument reference.
 
 ## License
 

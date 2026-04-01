@@ -1,5 +1,5 @@
 ---
-name: md2pdf
+name: lovstudio-md2pdf
 description: >
   Convert Markdown documents to professionally typeset PDF files with reportlab.
   Handles CJK/Latin mixed text, fenced code blocks, tables, blockquotes, cover pages,
