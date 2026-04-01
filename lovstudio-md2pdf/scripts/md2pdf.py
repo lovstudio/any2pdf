@@ -166,79 +166,158 @@ def register_fonts():
                                   italic="SerifIt", boldItalic="SerifBI")
 
 # ═══════════════════════════════════════════════════════════════════════
-# THEMES
+# THEMES — each theme has colors + layout for real typographic difference
 # ═══════════════════════════════════════════════════════════════════════
+# Layout keys:
+#   margins: (left, right, top, bottom) in mm
+#   body_font: "Serif" or "Sans"
+#   body_size / body_leading: body text dimensions
+#   h1_size / h2_size / h3_size: heading sizes
+#   heading_align: TA_CENTER or TA_LEFT
+#   heading_decoration: "rules" | "underline" | "dot" | "none"
+#   header_style: "full" | "minimal" | "none"
+#   code_style: "bg" (background fill) | "border" (left border only)
+#   cover_style: "centered" | "left-aligned" | "minimal"
+
+_DEFAULT_LAYOUT = {
+    "margins": (25, 22, 28, 25),
+    "body_font": "Serif", "body_size": 10.5, "body_leading": 17,
+    "h1_size": 26, "h2_size": 18, "h3_size": 12,
+    "heading_align": "center", "heading_decoration": "rules",
+    "header_style": "full", "code_style": "bg", "cover_style": "centered",
+}
+
 THEMES = {
     "warm-academic": {
         "canvas":"#F9F9F7","canvas_sec":"#F0EEE6","ink":"#181818","ink_faded":"#87867F",
         "accent":"#CC785C","accent_light":"#D99A82","border":"#E8E6DC",
-        "watermark_rgba":(0.82,0.80,0.76,0.12)
+        "watermark_rgba":(0.82,0.80,0.76,0.12),
+        "layout": {
+            "body_font":"Serif","body_size":10.5,"body_leading":17,
+            "heading_align":"center","heading_decoration":"rules",
+            "header_style":"full","code_style":"bg","cover_style":"centered",
+        }
     },
     "nord-frost": {
         "canvas":"#ECEFF4","canvas_sec":"#E5E9F0","ink":"#2E3440","ink_faded":"#4C566A",
         "accent":"#5E81AC","accent_light":"#81A1C1","border":"#D8DEE9",
-        "watermark_rgba":(0.74,0.78,0.85,0.10)
+        "watermark_rgba":(0.74,0.78,0.85,0.10),
+        "layout": {
+            "body_font":"Sans","body_size":10,"body_leading":16,
+            "h3_size":11,"heading_align":"left","heading_decoration":"underline",
+            "header_style":"minimal","code_style":"border","cover_style":"left-aligned",
+        }
     },
     "github-light": {
         "canvas":"#FFFFFF","canvas_sec":"#F6F8FA","ink":"#1F2328","ink_faded":"#656D76",
         "accent":"#0969DA","accent_light":"#218BFF","border":"#D0D7DE",
-        "watermark_rgba":(0.80,0.82,0.85,0.08)
+        "watermark_rgba":(0.80,0.82,0.85,0.08),
+        "layout": {
+            "body_font":"Sans","body_size":10,"body_leading":16.5,
+            "heading_align":"left","heading_decoration":"none",
+            "header_style":"minimal","code_style":"bg","cover_style":"left-aligned",
+        }
     },
     "solarized-light": {
         "canvas":"#FDF6E3","canvas_sec":"#EEE8D5","ink":"#657B83","ink_faded":"#93A1A1",
         "accent":"#CB4B16","accent_light":"#DC322F","border":"#EEE8D5",
-        "watermark_rgba":(0.85,0.82,0.72,0.10)
+        "watermark_rgba":(0.85,0.82,0.72,0.10),
     },
     "paper-classic": {
         "canvas":"#FFFFFF","canvas_sec":"#FAFAFA","ink":"#000000","ink_faded":"#666666",
         "accent":"#CC0000","accent_light":"#FF3333","border":"#DDDDDD",
-        "watermark_rgba":(0.85,0.85,0.85,0.08)
+        "watermark_rgba":(0.85,0.85,0.85,0.08),
     },
     "ocean-breeze": {
         "canvas":"#F0F7F4","canvas_sec":"#E0EDE8","ink":"#1A2E35","ink_faded":"#5A7D7C",
         "accent":"#2A9D8F","accent_light":"#64CCBF","border":"#C8DDD6",
-        "watermark_rgba":(0.75,0.85,0.80,0.10)
+        "watermark_rgba":(0.75,0.85,0.80,0.10),
+        "layout": {
+            "body_font":"Sans","body_size":10.5,"body_leading":17,
+            "heading_align":"left","heading_decoration":"underline",
+            "header_style":"full","code_style":"bg","cover_style":"centered",
+        }
     },
     "monokai-warm": {
         "canvas":"#272822","canvas_sec":"#1E1F1C","ink":"#F8F8F2","ink_faded":"#75715E",
         "accent":"#F92672","accent_light":"#FD971F","border":"#49483E",
-        "watermark_rgba":(0.30,0.30,0.28,0.08)
+        "watermark_rgba":(0.30,0.30,0.28,0.08),
     },
     "dracula-soft": {
         "canvas":"#282A36","canvas_sec":"#21222C","ink":"#F8F8F2","ink_faded":"#6272A4",
         "accent":"#BD93F9","accent_light":"#FF79C6","border":"#44475A",
-        "watermark_rgba":(0.35,0.30,0.45,0.08)
+        "watermark_rgba":(0.35,0.30,0.45,0.08),
     },
     # --- Inspired by classic LaTeX templates ---
     "tufte": {
         "canvas":"#FFFFF8","canvas_sec":"#F7F7F0","ink":"#111111","ink_faded":"#999988",
         "accent":"#980000","accent_light":"#C04040","border":"#E0DDD0",
-        "watermark_rgba":(0.88,0.87,0.82,0.08)
+        "watermark_rgba":(0.88,0.87,0.82,0.08),
+        "layout": {
+            "margins":(30, 55, 25, 25),  # wide right margin (Tufte sidenote style)
+            "body_font":"Serif","body_size":11,"body_leading":18,
+            "h1_size":24,"h2_size":16,"h3_size":11,
+            "heading_align":"left","heading_decoration":"none",
+            "header_style":"none","code_style":"border","cover_style":"minimal",
+        }
     },
     "classic-thesis": {
         "canvas":"#FEFEFE","canvas_sec":"#F5F2EB","ink":"#2B2B2B","ink_faded":"#7A7568",
         "accent":"#8B4513","accent_light":"#A0522D","border":"#D6CFC2",
-        "watermark_rgba":(0.82,0.78,0.72,0.10)
+        "watermark_rgba":(0.82,0.78,0.72,0.10),
+        "layout": {
+            "body_font":"Serif","body_size":10.5,"body_leading":17,
+            "h1_size":28,"h2_size":20,
+            "heading_align":"center","heading_decoration":"rules",
+            "header_style":"full","code_style":"bg","cover_style":"centered",
+        }
     },
     "ieee-journal": {
         "canvas":"#FFFFFF","canvas_sec":"#F5F5F5","ink":"#000000","ink_faded":"#555555",
         "accent":"#003366","accent_light":"#336699","border":"#CCCCCC",
-        "watermark_rgba":(0.82,0.82,0.82,0.08)
+        "watermark_rgba":(0.82,0.82,0.82,0.08),
+        "layout": {
+            "margins":(20, 20, 22, 20),  # tight margins like journal papers
+            "body_font":"Serif","body_size":9.5,"body_leading":14,
+            "h1_size":22,"h2_size":14,"h3_size":11,
+            "heading_align":"left","heading_decoration":"underline",
+            "header_style":"minimal","code_style":"border","cover_style":"left-aligned",
+        }
     },
     "elegant-book": {
         "canvas":"#FBF9F1","canvas_sec":"#F0ECE0","ink":"#1A1A1A","ink_faded":"#6E6B5E",
         "accent":"#5B3A29","accent_light":"#7D5642","border":"#DDD8C8",
-        "watermark_rgba":(0.85,0.82,0.75,0.10)
+        "watermark_rgba":(0.85,0.82,0.75,0.10),
+        "layout": {
+            "margins":(28, 24, 30, 28),  # generous margins for book feel
+            "body_font":"Serif","body_size":10.5,"body_leading":18,
+            "h1_size":28,"h2_size":20,
+            "heading_align":"center","heading_decoration":"dot",
+            "header_style":"full","code_style":"bg","cover_style":"centered",
+        }
     },
     "chinese-red": {
         "canvas":"#FFFDF5","canvas_sec":"#F8F0E0","ink":"#1A1009","ink_faded":"#8C7A5E",
         "accent":"#B22222","accent_light":"#D44040","border":"#E8DCC8",
-        "watermark_rgba":(0.88,0.82,0.72,0.10)
+        "watermark_rgba":(0.88,0.82,0.72,0.10),
+        "layout": {
+            "body_font":"Serif","body_size":11,"body_leading":18,
+            "h1_size":28,"h2_size":20,
+            "heading_align":"center","heading_decoration":"rules",
+            "header_style":"full","code_style":"bg","cover_style":"centered",
+        }
     },
     "ink-wash": {
         "canvas":"#F8F6F0","canvas_sec":"#EEEAE0","ink":"#2C2C2C","ink_faded":"#8A8A80",
         "accent":"#404040","accent_light":"#666660","border":"#D8D4C8",
-        "watermark_rgba":(0.80,0.80,0.76,0.10)
+        "watermark_rgba":(0.80,0.80,0.76,0.10),
+        "layout": {
+            "margins":(30, 30, 30, 28),  # symmetric, generous whitespace
+            "body_font":"Serif","body_size":10.5,"body_leading":18,
+            "h1_size":24,"h2_size":16,"h3_size":11,
+            "heading_align":"center","heading_decoration":"dot",
+            "header_style":"none","code_style":"border","cover_style":"minimal",
+        }
     },
 }
 
@@ -251,6 +330,9 @@ def load_theme(name, theme_file=None):
     else:
         print(f"Unknown theme '{name}', falling back to warm-academic", file=sys.stderr)
         t = THEMES["warm-academic"]
+    # Merge layout with defaults
+    layout = dict(_DEFAULT_LAYOUT)
+    layout.update(t.get("layout", {}))
     return {
         "canvas":    HexColor(t["canvas"]),
         "canvas_sec":HexColor(t["canvas_sec"]),
@@ -260,6 +342,7 @@ def load_theme(name, theme_file=None):
         "accent_light":HexColor(t.get("accent_light", t["accent"])),
         "border":    HexColor(t["border"]),
         "wm_color":  Color(*t.get("watermark_rgba", (0.82,0.80,0.76,0.12))),
+        "layout":    layout,
     }
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -390,6 +473,21 @@ class ClayDot(Flowable):
         cx = self.width / 2
         self.canv.circle(cx, 3*mm, 1.5*mm, fill=1, stroke=0)
 
+class LeftBorderParagraph(Flowable):
+    """Paragraph with a left accent border line (for code blocks in 'border' style)."""
+    def __init__(self, para, border_color, border_width=2):
+        Flowable.__init__(self)
+        self._para = para
+        self._bc = border_color; self._bw = border_width
+    def wrap(self, aw, ah):
+        w, h = self._para.wrap(aw, ah)
+        self.width = w; self.height = h
+        return w, h
+    def draw(self):
+        self._para.drawOn(self.canv, 0, 0)
+        self.canv.setStrokeColor(self._bc); self.canv.setLineWidth(self._bw)
+        self.canv.line(2, -2, 2, self.height + 2)
+
 # ═══════════════════════════════════════════════════════════════════════
 # PDF BUILDER
 # ═══════════════════════════════════════════════════════════════════════
@@ -397,35 +495,51 @@ class PDFBuilder:
     def __init__(self, config):
         self.cfg = config
         self.T = config["theme"]  # resolved theme colors
+        self.L = self.T["layout"]  # layout parameters
         self.page_w, self.page_h = config["page_size"]
-        self.lm, self.rm, self.tm, self.bm = 25*mm, 22*mm, 28*mm, 25*mm
+        lm, rm, tm, bm = self.L["margins"]
+        self.lm, self.rm, self.tm, self.bm = lm*mm, rm*mm, tm*mm, bm*mm
         self.body_w = self.page_w - self.lm - self.rm
         self.body_h = self.page_h - self.tm - self.bm
         self.accent_hex = config.get("accent_hex", "#CC785C")
         self.ST = self._build_styles()
 
     def _build_styles(self):
-        T = self.T
+        T = self.T; L = self.L
         s = {}
-        s['part'] = ParagraphStyle('Part', fontName="Serif", fontSize=26, leading=36,
-            textColor=T["ink"], alignment=TA_CENTER, spaceBefore=0, spaceAfter=0)
-        s['chapter'] = ParagraphStyle('Ch', fontName="Serif", fontSize=18, leading=26,
-            textColor=T["ink"], alignment=TA_CENTER, spaceBefore=0, spaceAfter=0)
-        s['h3'] = ParagraphStyle('H3', fontName="SansBold", fontSize=12, leading=17,
-            textColor=T["accent"], alignment=TA_LEFT, spaceBefore=10, spaceAfter=4)
-        s['body'] = ParagraphStyle('Body', fontName="Serif", fontSize=10.5, leading=17,
+        bf = L["body_font"]  # "Serif" or "Sans"
+        bs, bl = L["body_size"], L["body_leading"]
+        h_align = TA_CENTER if L["heading_align"] == "center" else TA_LEFT
+        s['part'] = ParagraphStyle('Part', fontName="Serif", fontSize=L["h1_size"],
+            leading=L["h1_size"]+10, textColor=T["ink"], alignment=h_align,
+            spaceBefore=0, spaceAfter=0)
+        s['chapter'] = ParagraphStyle('Ch', fontName="Serif", fontSize=L["h2_size"],
+            leading=L["h2_size"]+8, textColor=T["ink"], alignment=h_align,
+            spaceBefore=0, spaceAfter=0)
+        s['h3'] = ParagraphStyle('H3', fontName="SansBold", fontSize=L["h3_size"],
+            leading=L["h3_size"]+5, textColor=T["accent"], alignment=TA_LEFT,
+            spaceBefore=10, spaceAfter=4)
+        s['body'] = ParagraphStyle('Body', fontName=bf, fontSize=bs, leading=bl,
             textColor=T["ink"], alignment=TA_JUSTIFY, spaceBefore=2, spaceAfter=4,
             wordWrap='CJK')
         s['body_indent'] = ParagraphStyle('BI', parent=s['body'],
             leftIndent=14, rightIndent=14, textColor=T["ink_faded"],
             borderColor=T["accent"], borderWidth=0, borderPadding=4)
-        s['bullet'] = ParagraphStyle('Bul', fontName="Serif", fontSize=10.5, leading=17,
+        s['bullet'] = ParagraphStyle('Bul', fontName=bf, fontSize=bs, leading=bl,
             textColor=T["ink"], alignment=TA_LEFT, spaceBefore=1, spaceAfter=1,
             leftIndent=18, bulletIndent=6, wordWrap='CJK')
-        s['code'] = ParagraphStyle('Code', fontName="Mono", fontSize=7.5, leading=10.5,
-            textColor=HexColor("#3D3D3A"), alignment=TA_LEFT, spaceBefore=4, spaceAfter=4,
-            leftIndent=8, rightIndent=8, backColor=T["canvas_sec"],
-            borderColor=T["border"], borderWidth=0.5, borderPadding=6)
+        # Code block: "bg" = background fill, "border" = left accent line (no bg)
+        self._code_style_type = L["code_style"]
+        if L["code_style"] == "border":
+            s['code'] = ParagraphStyle('Code', fontName="Mono", fontSize=7.5, leading=10.5,
+                textColor=HexColor("#3D3D3A"), alignment=TA_LEFT, spaceBefore=4, spaceAfter=4,
+                leftIndent=14, rightIndent=8, backColor=None,
+                borderColor=None, borderWidth=0, borderPadding=6)
+        else:
+            s['code'] = ParagraphStyle('Code', fontName="Mono", fontSize=7.5, leading=10.5,
+                textColor=HexColor("#3D3D3A"), alignment=TA_LEFT, spaceBefore=4, spaceAfter=4,
+                leftIndent=8, rightIndent=8, backColor=T["canvas_sec"],
+                borderColor=T["border"], borderWidth=0.5, borderPadding=6)
         s['toc1'] = ParagraphStyle('T1', fontName="Serif", fontSize=12, leading=20,
             textColor=T["ink"], leftIndent=0, spaceBefore=6, spaceAfter=2)
         s['toc2'] = ParagraphStyle('T2', fontName="Sans", fontSize=10, leading=16,
@@ -444,74 +558,139 @@ class PDFBuilder:
     def _cover_page(self, c, doc):
         c.saveState(); self._draw_bg(c)
         T = self.T; cx = self.page_w / 2
+        cover = self.L["cover_style"]
 
+        if cover == "left-aligned":
+            self._cover_left_aligned(c, T, cx)
+        elif cover == "minimal":
+            self._cover_minimal(c, T, cx)
+        else:
+            self._cover_centered(c, T, cx)
+
+        c.restoreState()
+
+    def _cover_centered(self, c, T, cx):
+        """Classic centered cover with accent bars and rule."""
         # Top accent bar
         c.setFillColor(T["accent"])
         c.rect(0, self.page_h - 3*mm, self.page_w, 3*mm, fill=1, stroke=0)
 
-        # Main title — centered in upper-mid area
         title_y = self.page_h * 0.62
         c.setFillColor(T["ink"])
         _draw_mixed(c, cx, title_y, self.cfg.get("title", "Document"), 38, anchor="center")
 
-        # Version tag below title
         ver = self.cfg.get("version", "")
         if ver:
             c.setFillColor(T["accent"]); c.setFont("Sans", 13)
             c.drawCentredString(cx, title_y - 30, ver)
 
-        # Short accent rule
         rule_y = title_y - 52
         c.setStrokeColor(T["accent"]); c.setLineWidth(1.5)
         c.line(cx - 17*mm, rule_y, cx + 17*mm, rule_y)
 
-        # Subtitle — supports mixed-font segments via subtitle_segs config
         sub = self.cfg.get("subtitle", "")
-        sub_segs = self.cfg.get("subtitle_segs")  # list of (font, text, size) tuples
+        sub_segs = self.cfg.get("subtitle_segs")
         if sub_segs:
-            c.setFillColor(T["ink_faded"])
-            _draw_mixed_segs(c, cx, rule_y - 32, sub_segs)
+            c.setFillColor(T["ink_faded"]); _draw_mixed_segs(c, cx, rule_y - 32, sub_segs)
         elif sub:
-            c.setFillColor(T["ink"])
-            _draw_mixed(c, cx, rule_y - 32, sub, 20, anchor="center")
+            c.setFillColor(T["ink"]); _draw_mixed(c, cx, rule_y - 32, sub, 20, anchor="center")
 
-        # Stats line (optional) — e.g. "1,884 files · 394,222 lines · 54 tools"
         stats = self.cfg.get("stats_line", "")
         stats2 = self.cfg.get("stats_line2", "")
         if stats or stats2:
-            c.setFillColor(T["ink_faded"])
-            stats_y = rule_y - 72
-            if stats:
-                _draw_mixed(c, cx, stats_y, stats, 9.5, anchor="center")
-            if stats2:
-                _draw_mixed(c, cx, stats_y - 18, stats2, 9.5, anchor="center")
+            c.setFillColor(T["ink_faded"]); stats_y = rule_y - 72
+            if stats: _draw_mixed(c, cx, stats_y, stats, 9.5, anchor="center")
+            if stats2: _draw_mixed(c, cx, stats_y - 18, stats2, 9.5, anchor="center")
 
-        # Bottom area — thin border rule
         c.setStrokeColor(T["border"]); c.setLineWidth(0.5)
         c.line(self.lm + 20*mm, 52*mm, self.page_w - self.rm - 20*mm, 52*mm)
 
-        # Author — centered
         author = self.cfg.get("author", "")
         if author:
-            c.setFillColor(T["ink_faded"])
-            _draw_mixed(c, cx, 38*mm, author, 10, anchor="center")
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, cx, 38*mm, author, 10, anchor="center")
 
-        # Date — centered below
         dt = self.cfg.get("date", str(date.today()))
-        c.setFillColor(T["ink_faded"])
-        _draw_mixed(c, cx, 28*mm, dt, 9, anchor="center")
+        c.setFillColor(T["ink_faded"]); _draw_mixed(c, cx, 28*mm, dt, 9, anchor="center")
 
-        # Edition line (optional) — e.g. "v0.019 · 30+ Chapters · 6 Appendices"
         edition = self.cfg.get("edition_line", "")
         if edition:
-            c.setFillColor(T["ink_faded"])
-            _draw_mixed(c, cx, 20*mm, edition, 7.5, anchor="center")
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, cx, 20*mm, edition, 7.5, anchor="center")
 
-        # Bottom accent bar
         c.setFillColor(T["accent"])
         c.rect(0, 0, self.page_w, 3*mm, fill=1, stroke=0)
 
-        c.restoreState()
+    def _cover_left_aligned(self, c, T, cx):
+        """Modern left-aligned cover (GitHub/IEEE style)."""
+        # Thick left accent stripe
+        c.setFillColor(T["accent"])
+        c.rect(0, 0, 6*mm, self.page_h, fill=1, stroke=0)
+
+        lx = 25*mm  # left text x
+        title_y = self.page_h * 0.58
+        c.setFillColor(T["ink"])
+        _draw_mixed(c, lx, title_y, self.cfg.get("title", "Document"), 34, anchor="left")
+
+        ver = self.cfg.get("version", "")
+        if ver:
+            c.setFillColor(T["accent"]); c.setFont("Sans", 12)
+            c.drawString(lx, title_y - 28, ver)
+
+        # Accent underline
+        c.setStrokeColor(T["accent"]); c.setLineWidth(2)
+        c.line(lx, title_y - 42, lx + 50*mm, title_y - 42)
+
+        sub = self.cfg.get("subtitle", "")
+        sub_segs = self.cfg.get("subtitle_segs")
+        if sub_segs:
+            c.setFillColor(T["ink_faded"]); _draw_mixed_segs(c, lx + 40*mm, title_y - 62, sub_segs)
+        elif sub:
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, lx, title_y - 62, sub, 16, anchor="left")
+
+        stats = self.cfg.get("stats_line", "")
+        stats2 = self.cfg.get("stats_line2", "")
+        if stats or stats2:
+            c.setFillColor(T["ink_faded"]); stats_y = title_y - 100
+            if stats: _draw_mixed(c, lx, stats_y, stats, 9, anchor="left")
+            if stats2: _draw_mixed(c, lx, stats_y - 16, stats2, 9, anchor="left")
+
+        # Bottom left info block
+        author = self.cfg.get("author", "")
+        if author:
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, lx, 38*mm, author, 10, anchor="left")
+        dt = self.cfg.get("date", str(date.today()))
+        c.setFillColor(T["ink_faded"]); _draw_mixed(c, lx, 28*mm, dt, 9, anchor="left")
+
+        edition = self.cfg.get("edition_line", "")
+        if edition:
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, lx, 20*mm, edition, 7.5, anchor="left")
+
+    def _cover_minimal(self, c, T, cx):
+        """Minimal cover (Tufte/ink-wash style) — lots of whitespace, no bars."""
+        title_y = self.page_h * 0.50
+        c.setFillColor(T["ink"])
+        _draw_mixed(c, cx, title_y, self.cfg.get("title", "Document"), 32, anchor="center")
+
+        sub = self.cfg.get("subtitle", "")
+        sub_segs = self.cfg.get("subtitle_segs")
+        if sub_segs:
+            c.setFillColor(T["ink_faded"]); _draw_mixed_segs(c, cx, title_y - 36, sub_segs)
+        elif sub:
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, cx, title_y - 36, sub, 16, anchor="center")
+
+        ver = self.cfg.get("version", "")
+        if ver:
+            c.setFillColor(T["ink_faded"]); c.setFont("Sans", 10)
+            c.drawCentredString(cx, title_y - 60, ver)
+
+        # Simple thin rule
+        c.setStrokeColor(T["border"]); c.setLineWidth(0.3)
+        c.line(cx - 25*mm, title_y - 75, cx + 25*mm, title_y - 75)
+
+        author = self.cfg.get("author", "")
+        if author:
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, cx, 35*mm, author, 10, anchor="center")
+        dt = self.cfg.get("date", str(date.today()))
+        c.setFillColor(T["ink_faded"]); _draw_mixed(c, cx, 25*mm, dt, 9, anchor="center")
 
     def _frontispiece_page(self, c, doc):
         """Full-page image page after cover."""
@@ -572,7 +751,7 @@ class PDFBuilder:
     def _normal_page(self, c, doc):
         self._draw_bg(c); pg = c.getPageNumber()
         c.saveState()
-        T = self.T
+        T = self.T; hs = self.L["header_style"]
 
         # Watermark
         wm = self.cfg.get("watermark", "")
@@ -584,39 +763,50 @@ class PDFBuilder:
                     c.drawCentredString(dx, dy, wm)
             c.rotate(-35); c.translate(-self.page_w/2, -self.page_h/2)
 
-        # Header line
-        c.setStrokeColor(T["border"]); c.setLineWidth(0.5)
-        c.line(self.lm, self.page_h - 20*mm, self.page_w - self.rm, self.page_h - 20*mm)
-        c.setFillColor(T["ink_faded"])
-
-        # Header left: report title (if provided)
-        header_title = self.cfg.get("header_title", "")
-        if header_title:
-            _draw_mixed(c, self.lm, self.page_h - 18*mm, header_title, 8)
-
-        # Header right: current chapter name
-        ch = _cur_chapter[0]
-        if ch:
-            _draw_mixed(c, self.page_w - self.rm, self.page_h - 18*mm, ch[:40], 8, anchor="right")
-
-        # Footer line
-        c.setStrokeColor(T["border"])
-        c.line(self.lm, self.bm - 8*mm, self.page_w - self.rm, self.bm - 8*mm)
-
-        # Footer center: page number with accent
-        c.setFillColor(T["accent"]); c.setFont("Serif", 9)
-        c.drawCentredString(self.page_w/2, self.bm - 16*mm, f"\u2014  {pg}  \u2014")
-
-        # Footer left: author/brand (if provided)
-        footer_left = self.cfg.get("footer_left", self.cfg.get("author", ""))
-        if footer_left:
+        if hs == "full":
+            # Header line + title + chapter
+            c.setStrokeColor(T["border"]); c.setLineWidth(0.5)
+            c.line(self.lm, self.page_h - 20*mm, self.page_w - self.rm, self.page_h - 20*mm)
             c.setFillColor(T["ink_faded"])
-            _draw_mixed(c, self.lm, self.bm - 16*mm, footer_left, 8)
+            header_title = self.cfg.get("header_title", "")
+            if header_title:
+                _draw_mixed(c, self.lm, self.page_h - 18*mm, header_title, 8)
+            ch = _cur_chapter[0]
+            if ch:
+                _draw_mixed(c, self.page_w - self.rm, self.page_h - 18*mm, ch[:40], 8, anchor="right")
+        elif hs == "minimal":
+            # Just page number in header, no line
+            c.setFillColor(T["ink_faded"]); c.setFont("Sans", 8)
+            c.drawRightString(self.page_w - self.rm, self.page_h - 16*mm, str(pg))
 
-        # Footer right: date
-        c.setFillColor(T["ink_faded"])
-        _draw_mixed(c, self.page_w - self.rm, self.bm - 16*mm,
-                    self.cfg.get("date", str(date.today())), 8, anchor="right")
+        # Footer
+        if hs != "none":
+            c.setStrokeColor(T["border"])
+            c.line(self.lm, self.bm - 8*mm, self.page_w - self.rm, self.bm - 8*mm)
+
+        # Footer center: page number with accent (full & minimal)
+        if hs == "full":
+            c.setFillColor(T["accent"]); c.setFont("Serif", 9)
+            c.drawCentredString(self.page_w/2, self.bm - 16*mm, f"\u2014  {pg}  \u2014")
+        elif hs == "minimal":
+            # Just a simple number
+            c.setFillColor(T["ink_faded"]); c.setFont("Sans", 8)
+            c.drawCentredString(self.page_w/2, self.bm - 14*mm, str(pg))
+        elif hs == "none":
+            # Bottom page number only, no lines
+            c.setFillColor(T["ink_faded"]); c.setFont("Serif", 8)
+            c.drawCentredString(self.page_w/2, self.bm - 10*mm, str(pg))
+
+        # Footer left: author/brand
+        if hs == "full":
+            footer_left = self.cfg.get("footer_left", self.cfg.get("author", ""))
+            if footer_left:
+                c.setFillColor(T["ink_faded"])
+                _draw_mixed(c, self.lm, self.bm - 16*mm, footer_left, 8)
+            # Footer right: date
+            c.setFillColor(T["ink_faded"])
+            _draw_mixed(c, self.page_w - self.rm, self.bm - 16*mm,
+                        self.cfg.get("date", str(date.today())), 8, anchor="right")
         c.restoreState()
 
     def _toc_page(self, c, doc):
@@ -730,7 +920,11 @@ class PDFBuilder:
                         if len(cl) > code_max:
                             cl = cl[:code_max - 2] + ['  // ... (truncated)']
                             ct = '\n'.join(cl)
-                        story.append(Paragraph(_font_wrap(esc_code(ct)), ST['code']))
+                        para = Paragraph(_font_wrap(esc_code(ct)), ST['code'])
+                        if self._code_style_type == "border":
+                            story.append(LeftBorderParagraph(para, self.T["accent"]))
+                        else:
+                            story.append(para)
                     code_buf = []; in_code = False
                 else: in_code = True; code_buf = []
                 i += 1; continue
@@ -738,32 +932,49 @@ class PDFBuilder:
             if stripped in ('---','\\newpage','') or stripped.startswith(('title:','subtitle:','author:','date:')):
                 i += 1; continue
 
-            # H1 — Part heading: full divider page, vertically + horizontally centered
+            # H1 — Part heading: full divider page
             if re.match(r'^# (第.+部分|附录)', stripped) or \
                (re.match(r'^# .+', stripped) and not stripped.startswith('## ')):
                 if re.match(r'^# .+', stripped):
                     title = stripped.lstrip('#').strip()
                     story.append(PageBreak())
                     cm = ChapterMark(title, level=0); story.append(cm)
-                    # Vertically center: push content to ~40% from top
+                    hdeco = self.L["heading_decoration"]
                     story.append(Spacer(1, self.body_h * 0.35))
-                    story.append(HRuleCentered(self.body_w, 40*mm, 0.8, self.T["accent"]))
-                    story.append(Spacer(1, 8*mm))
+                    if hdeco == "rules":
+                        story.append(HRuleCentered(self.body_w, 40*mm, 0.8, self.T["accent"]))
+                        story.append(Spacer(1, 8*mm))
                     story.append(Paragraph(md_inline(title, ah), ST['part']))
-                    story.append(Spacer(1, 8*mm))
-                    story.append(HRuleCentered(self.body_w, 25*mm, 0.8, self.T["accent"]))
+                    if hdeco == "rules":
+                        story.append(Spacer(1, 8*mm))
+                        story.append(HRuleCentered(self.body_w, 25*mm, 0.8, self.T["accent"]))
+                    elif hdeco == "underline":
+                        story.append(Spacer(1, 4*mm))
+                        story.append(HRule(self.body_w, 1.0, self.T["accent"]))
+                    elif hdeco == "dot":
+                        story.append(Spacer(1, 6*mm))
+                        story.append(ClayDot(self.body_w, self.T["accent"]))
+                    # "none" = no decoration
                     toc.append(('part', title, cm.key))
                     i += 1; continue
 
-            # H2 — Chapter heading: centered with accent decoration
+            # H2 — Chapter heading
             if stripped.startswith('## '):
                 title = stripped[3:].strip()
                 story.append(PageBreak())
                 cm = ChapterMark(title, level=1); story.append(cm)
+                hdeco = self.L["heading_decoration"]
                 story.append(Spacer(1, self.body_h * 0.30))
                 story.append(Paragraph(md_inline(title, ah), ST['chapter']))
-                story.append(Spacer(1, 5*mm))
-                story.append(HRuleCentered(self.body_w, 35*mm, 1.2, self.T["accent"]))
+                if hdeco == "rules":
+                    story.append(Spacer(1, 5*mm))
+                    story.append(HRuleCentered(self.body_w, 35*mm, 1.2, self.T["accent"]))
+                elif hdeco == "underline":
+                    story.append(Spacer(1, 3*mm))
+                    story.append(HRule(self.body_w, 0.8, self.T["accent"]))
+                elif hdeco == "dot":
+                    story.append(Spacer(1, 5*mm))
+                    story.append(ClayDot(self.body_w, self.T["accent"]))
                 toc.append(('chapter', title, cm.key))
                 i += 1; continue
 
