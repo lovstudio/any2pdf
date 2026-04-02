@@ -1,5 +1,5 @@
 {
-  "name": "md2pdf",
+  "name": "any2pdf",
   "private": true,
   "scripts": {
     "dev": "bash dev.sh",

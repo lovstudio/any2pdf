@@ -1,4 +1,4 @@
-# md2pdf
+# any2pdf
 
 **Tell your AI assistant "转PDF" and get a publication-quality document.** No config, no templates, no LaTeX.
 
@@ -12,7 +12,7 @@ Every existing Markdown-to-PDF tool falls into one of two traps:
 
 2. **Too complex** — LaTeX produces beautiful output but requires a 4GB TeX distribution, arcane syntax, and breaks on every CJK edge case. No AI assistant can reliably drive it.
 
-**md2pdf** is the sweet spot: one Python file, one dependency (`reportlab`), zero config — and it handles every CJK/Latin edge case because we hit them all building real 200-page Chinese technical reports.
+**any2pdf** is the sweet spot: one Python file, one dependency (`reportlab`), zero config — and it handles every CJK/Latin edge case because we hit them all building real 200-page Chinese technical reports.
 
 ## What Makes It Different
 
@@ -52,7 +52,7 @@ Fonts are auto-discovered from system paths. Missing fonts? You get a helpful er
 ## Install
 
 ```bash
-npx skills add lovstudio/md2pdf -g -y
+npx skills add lovstudio/any2pdf -g -y
 ```
 
 Works with 25+ AI agents: Claude Code, Cursor, GitHub Copilot, Gemini CLI, Codex, Cline, Warp, and more.
@@ -140,7 +140,7 @@ Works with 25+ AI agents: Claude Code, Cursor, GitHub Copilot, Gemini CLI, Codex
 ```bash
 pip install reportlab
 
-python lovstudio-md2pdf/scripts/md2pdf.py \
+python lovstudio-any2pdf/scripts/md2pdf.py \
   --input report.md \
   --output report.pdf \
   --title "My Report" \
@@ -150,7 +150,7 @@ python lovstudio-md2pdf/scripts/md2pdf.py \
   --toc true
 ```
 
-See [SKILL.md](lovstudio-md2pdf/SKILL.md) for the full 20+ argument reference.
+See [SKILL.md](lovstudio-any2pdf/SKILL.md) for the full 20+ argument reference.
 
 ## License
 

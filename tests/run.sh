@@ -1,7 +1,7 @@
 #!/bin/bash
 # Batch test: generate PDFs for all test cases across themes
-SCRIPT="$(dirname "$0")/../lovstudio-md2pdf/scripts/md2pdf.py"
-OUT="/tmp/md2pdf-tests"
+SCRIPT="$(dirname "$0")/../lovstudio-any2pdf/scripts/md2pdf.py"
+OUT="/tmp/any2pdf-tests"
 rm -rf "$OUT" && mkdir -p "$OUT"
 
 THEMES=("warm-academic" "nord-frost" "tufte")

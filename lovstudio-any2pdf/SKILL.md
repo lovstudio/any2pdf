@@ -1,5 +1,5 @@
 ---
-name: lovstudio:md2pdf
+name: lovstudio:any2pdf
 description: >
   Convert Markdown documents to professionally typeset PDF files with reportlab.
   Handles CJK/Latin mixed text, fenced code blocks, tables, blockquotes, cover pages,
@@ -9,7 +9,7 @@ description: >
   wants to turn a .md file into a styled PDF, generate a report PDF from markdown,
   or create a print-ready document from markdown content — especially if CJK
   characters, code blocks, or tables are involved. Also trigger when the user
-  mentions "markdown to PDF", "md转pdf", "报告生成", or asks for a "typeset" or
+  mentions "markdown to PDF", "md2pdf", "any2pdf", "md转pdf", "报告生成", or asks for a "typeset" or
   "professionally formatted" PDF from markdown source.
 license: MIT
 compatibility: >
@@ -22,7 +22,7 @@ metadata:
   tags: markdown pdf cjk reportlab typesetting
 ---
 
-# md2pdf — Markdown to Professional PDF
+# any2pdf — Markdown to Professional PDF
 
 This skill converts any Markdown file into a publication-quality PDF using Python's
 reportlab library. It was developed through extensive iteration on real Chinese
