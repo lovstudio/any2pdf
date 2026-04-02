@@ -1,0 +1,8 @@
+{
+  "name": "md2pdf",
+  "private": true,
+  "scripts": {
+    "dev": "bash dev.sh",
+    "test": "bash tests/run.sh"
+  }
+}

@@ -385,8 +385,11 @@ def _font_wrap(text):
         out.append(f"<font name='CJK'>{seg}</font>" if in_cjk else seg)
     return ''.join(out)
 
-def _draw_mixed(c, x, y, text, size, anchor="left"):
-    """Draw mixed CJK/Latin text on canvas with font switching."""
+def _draw_mixed(c, x, y, text, size, anchor="left", max_w=0):
+    """Draw mixed CJK/Latin text on canvas with font switching.
+    If max_w > 0, wrap into multiple lines. Returns bottom y of drawn text."""
+    if max_w > 0:
+        return _draw_mixed_wrap(c, x, y, text, size, anchor, max_w)
     segs, buf, in_cjk = [], [], False
     for ch in text:
         cj = _is_cjk(ch)
@@ -400,6 +403,44 @@ def _draw_mixed(c, x, y, text, size, anchor="left"):
     for font, txt in segs:
         c.setFont(font, size); c.drawString(x, y, txt)
         x += c.stringWidth(txt, font, size)
+
+def _measure_mixed(c, text, size):
+    """Measure width of mixed CJK/Latin text."""
+    w = 0
+    buf, in_cjk = [], False
+    for ch in text:
+        cj = _is_cjk(ch)
+        if cj != in_cjk and buf:
+            w += c.stringWidth(''.join(buf), "CJK" if in_cjk else "Sans", size); buf = []
+        buf.append(ch); in_cjk = cj
+    if buf: w += c.stringWidth(''.join(buf), "CJK" if in_cjk else "Sans", size)
+    return w
+
+def _draw_mixed_wrap(c, x, y, text, size, anchor, max_w):
+    """Word-wrap mixed text into multiple lines, shrink font if single word overflows."""
+    words = text.split(' ')
+    # Shrink font until longest word fits (floor 16pt)
+    while size > 16:
+        longest = max(_measure_mixed(c, w, size) for w in words)
+        if longest <= max_w: break
+        size -= 1
+    # Greedy line breaking
+    lines, cur = [], []
+    cur_w = 0
+    space_w = c.stringWidth(' ', 'Sans', size)
+    for word in words:
+        ww = _measure_mixed(c, word, size)
+        test_w = cur_w + (space_w if cur else 0) + ww
+        if cur and test_w > max_w:
+            lines.append(' '.join(cur)); cur = [word]; cur_w = ww
+        else:
+            cur.append(word); cur_w = test_w
+    if cur: lines.append(' '.join(cur))
+    # Draw lines downward from y (top line at y)
+    line_h = size * 1.3
+    for i, line in enumerate(lines):
+        _draw_mixed(c, x, y - i * line_h, line, size, anchor)
+    return y - (len(lines) - 1) * line_h
 
 def _draw_mixed_segs(c, x, y, segs):
     """Draw pre-defined (font, text, size) segments on canvas.
@@ -589,14 +630,14 @@ class PDFBuilder:
 
         title_y = self.page_h * 0.62
         c.setFillColor(T["ink"])
-        _draw_mixed(c, cx, title_y, self.cfg.get("title", "Document"), 38, anchor="center")
+        btm = _draw_mixed(c, cx, title_y, self.cfg.get("title", "Document"), 38, anchor="center", max_w=self.page_w - 40*mm)
 
         ver = self.cfg.get("version", "")
         if ver:
             c.setFillColor(T["accent"]); c.setFont("Sans", 13)
-            c.drawCentredString(cx, title_y - 30, ver)
+            c.drawCentredString(cx, btm - 30, ver)
 
-        rule_y = title_y - 52
+        rule_y = btm - 52
         c.setStrokeColor(T["accent"]); c.setLineWidth(1.5)
         c.line(cx - 17*mm, rule_y, cx + 17*mm, rule_y)
 
@@ -640,28 +681,28 @@ class PDFBuilder:
         lx = 25*mm  # left text x
         title_y = self.page_h * 0.58
         c.setFillColor(T["ink"])
-        _draw_mixed(c, lx, title_y, self.cfg.get("title", "Document"), 34, anchor="left")
+        btm = _draw_mixed(c, lx, title_y, self.cfg.get("title", "Document"), 34, anchor="left", max_w=self.page_w - lx - 20*mm)
 
         ver = self.cfg.get("version", "")
         if ver:
             c.setFillColor(T["accent"]); c.setFont("Sans", 12)
-            c.drawString(lx, title_y - 28, ver)
+            c.drawString(lx, btm - 28, ver)
 
         # Accent underline
         c.setStrokeColor(T["accent"]); c.setLineWidth(2)
-        c.line(lx, title_y - 42, lx + 50*mm, title_y - 42)
+        c.line(lx, btm - 42, lx + 50*mm, btm - 42)
 
         sub = self.cfg.get("subtitle", "")
         sub_segs = self.cfg.get("subtitle_segs")
         if sub_segs:
-            c.setFillColor(T["ink_faded"]); _draw_mixed_segs(c, lx + 40*mm, title_y - 62, sub_segs)
+            c.setFillColor(T["ink_faded"]); _draw_mixed_segs(c, lx + 40*mm, btm - 62, sub_segs)
         elif sub:
-            c.setFillColor(T["ink_faded"]); _draw_mixed(c, lx, title_y - 62, sub, 16, anchor="left")
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, lx, btm - 62, sub, 16, anchor="left")
 
         stats = self.cfg.get("stats_line", "")
         stats2 = self.cfg.get("stats_line2", "")
         if stats or stats2:
-            c.setFillColor(T["ink_faded"]); stats_y = title_y - 100
+            c.setFillColor(T["ink_faded"]); stats_y = btm - 100
             if stats: _draw_mixed(c, lx, stats_y, stats, 9, anchor="left")
             if stats2: _draw_mixed(c, lx, stats_y - 16, stats2, 9, anchor="left")
 
@@ -680,23 +721,23 @@ class PDFBuilder:
         """Minimal cover (Tufte/ink-wash style) — lots of whitespace, no bars."""
         title_y = self.page_h * 0.50
         c.setFillColor(T["ink"])
-        _draw_mixed(c, cx, title_y, self.cfg.get("title", "Document"), 32, anchor="center")
+        btm = _draw_mixed(c, cx, title_y, self.cfg.get("title", "Document"), 32, anchor="center", max_w=self.page_w - 50*mm)
 
         sub = self.cfg.get("subtitle", "")
         sub_segs = self.cfg.get("subtitle_segs")
         if sub_segs:
-            c.setFillColor(T["ink_faded"]); _draw_mixed_segs(c, cx, title_y - 36, sub_segs)
+            c.setFillColor(T["ink_faded"]); _draw_mixed_segs(c, cx, btm - 36, sub_segs)
         elif sub:
-            c.setFillColor(T["ink_faded"]); _draw_mixed(c, cx, title_y - 36, sub, 16, anchor="center")
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, cx, btm - 36, sub, 16, anchor="center")
 
         ver = self.cfg.get("version", "")
         if ver:
             c.setFillColor(T["ink_faded"]); c.setFont("Sans", 10)
-            c.drawCentredString(cx, title_y - 60, ver)
+            c.drawCentredString(cx, btm - 60, ver)
 
         # Simple thin rule
         c.setStrokeColor(T["border"]); c.setLineWidth(0.3)
-        c.line(cx - 25*mm, title_y - 75, cx + 25*mm, title_y - 75)
+        c.line(cx - 25*mm, btm - 75, cx + 25*mm, btm - 75)
 
         author = self.cfg.get("author", "")
         if author:
