@@ -36,6 +36,7 @@ Every fix in this codebase came from a real rendering bug in a real report:
 - **Mixed text wrapping**: "Chaofan Shou" won't split across lines; Chinese text breaks naturally at character boundaries
 - **Canvas CJK**: Dates like "2026年4月1日" render correctly everywhere — cover, headers, footers
 - **Book-quality fonts**: Palatino + 宋体 (macOS), Times + SimSun (Windows) — not Arial + fallback
+- **Rich Markdown blocks**: Obsidian callouts, inline images, emoji, and LaTeX-style formulas render instead of disappearing
 - **Merged heading recovery**: Input like `# Part## Chapter` on one line? Auto-split before parsing
 
 ### For Everyone — Cross-Platform, Zero Config
@@ -48,6 +49,12 @@ Every fix in this codebase came from a real rendering bug in a real report:
 | Setup | `pip install reportlab` | `pip install reportlab` | `pip install reportlab` |
 
 Fonts are auto-discovered from system paths. Missing fonts? You get a helpful error with the exact install command for your OS.
+
+On Ubuntu/Debian, the broadest setup is:
+
+```bash
+sudo apt install fonts-dejavu-core fonts-liberation fonts-freefont-ttf fonts-noto fonts-noto-cjk fonts-noto-color-emoji
+```
 
 ## Install
 
@@ -129,16 +136,34 @@ Works with 25+ AI agents: Claude Code, Cursor, GitHub Copilot, Gemini CLI, Codex
 - **Cover page** with title, subtitle, author, version, stats lines
 - **Clickable table of contents** with PDF bookmark sidebar
 - **Frontispiece** — full-page image after cover (AI-generated or local)
-- **Running headers** — report title + current chapter name
+- **Running headers** — stable report/document title without page-lagged chapter labels
 - **Running footers** — author/brand, page number, date
 - **Watermark** — faint diagonal text on every content page
 - **Back cover** — banner image or text branding (QR codes, business cards)
 - **10 design themes** — from warm academic to ink wash minimalist
+- **Markdown images** — local and remote `![alt](src)` images with graceful fallback text
+- **Obsidian callouts** — `> [!NOTE]`, warnings, tips, quotes, and related callout types
+- **LaTeX-style formulas** — inline `$...$` and display `$$...$$` / `\[...\]`; install `matplotlib` for rendered math images
+- **Emoji fallback** — Twemoji image rendering when online, with local emoji-font fallback when available
+- **YAML frontmatter** — set title, theme, watermark, cover, TOC, and other options inside the Markdown file
 
 ## Direct CLI Usage
 
+You can keep document options in frontmatter so the source stays reproducible:
+
+```markdown
+---
+title: My Report
+author: Author Name
+theme: warm-academic
+watermark: DRAFT
+---
+```
+
 ```bash
 pip install reportlab
+# Optional, for rendered formula images instead of styled fallback text:
+pip install matplotlib
 
 python lovstudio-any2pdf/scripts/md2pdf.py \
   --input report.md \
