@@ -2,7 +2,8 @@
 name: lovstudio:any2pdf
 description: >
   Convert Markdown documents to professionally typeset PDF files with reportlab.
-  Handles CJK/Latin mixed text, fenced code blocks, tables, blockquotes, cover pages,
+  Handles CJK/Latin mixed text, fenced code blocks, tables, blockquotes, Obsidian
+  callouts, inline images, emoji fallback, LaTeX-style formulas, cover pages,
   clickable TOC, PDF bookmarks, watermarks, and page numbers. Supports multiple
   color themes (Warm Academic, Nord, GitHub Light, Solarized, etc.) and is
   battle-tested for Chinese technical reports. Use this skill whenever the user
@@ -14,11 +15,13 @@ description: >
 license: MIT
 compatibility: >
   Requires Python 3.8+ and reportlab (`pip install reportlab`).
+  Optional: matplotlib (`pip install matplotlib`) for rendered display formulas.
   macOS: uses Palatino, Songti SC, Menlo (pre-installed).
-  Linux: uses Carlito, Liberation Serif, Droid Sans Fallback, DejaVu Sans Mono.
+  Linux: uses DejaVu/Liberation/FreeFont/Noto, Noto CJK, Droid Sans Fallback,
+  DejaVu Sans Mono, and Noto Emoji when available.
 metadata:
   author: lovstudio
-  version: "1.0.0"
+  version: "1.1.0"
   tags: markdown pdf cjk reportlab typesetting
 ---
 
@@ -35,6 +38,7 @@ get wrong.
 - User has a markdown report/document and wants professional typesetting
 - Document contains CJK characters (Chinese/Japanese/Korean) mixed with Latin text
 - Document has fenced code blocks, markdown tables, or nested lists
+- Document has local/remote images, Obsidian callouts, emoji, or math formulas
 - User wants a cover page, table of contents, or watermark in their PDF
 
 ## Quick Start
@@ -138,6 +142,10 @@ Key components:
 5. **Smart table widths**: Proportional column widths based on content length, with 18mm minimum
 6. **Bookmark system**: `ChapterMark` flowable creates PDF sidebar bookmarks + named anchors
 7. **Heading preprocessor**: `_preprocess_md()` splits merged headings like `# Part## Chapter` into separate lines
+8. **Image handler**: local, relative, `file://`, and remote markdown images are scaled into the body frame with fallback text on errors
+9. **Callout renderer**: Obsidian-style `> [!NOTE]` blocks render as themed boxed callouts
+10. **Formula renderer**: display formulas use optional matplotlib mathtext images, with styled text fallback
+11. **Emoji fallback**: emoji are rendered as cached Twemoji PNGs when available, or with a local emoji font fallback
 
 ## Hard-Won Lessons
 
@@ -150,7 +158,7 @@ that might contain CJK, including code blocks.
 ### Code Blocks Losing Line Breaks
 
 reportlab treats `\n` as whitespace. **Fix**: `esc_code()` converts `\n` → `<br/>` and
-leading spaces → `&nbsp;`, applied BEFORE `_font_wrap()`.
+all spaces → `&nbsp;`, preserving indentation and mid-line alignment before `_font_wrap()`.
 
 ### CJK/Latin Word Wrapping
 
@@ -164,31 +172,34 @@ Default reportlab breaks lines only at spaces, causing ugly splits like "Claude\
 
 ## Configuration Reference
 
-| Argument | Default | Description |
-|----------|---------|-------------|
-| `--input` | (required) | Path to markdown file |
-| `--output` | `output.pdf` | Output PDF path |
-| `--title` | From first H1 | Document title for cover page |
-| `--subtitle` | `""` | Subtitle text |
-| `--author` | `""` | Author name |
-| `--date` | Today | Date string |
-| `--version` | `""` | Version string for cover |
-| `--watermark` | `""` | Watermark text (empty = none) |
-| `--theme` | `warm-academic` | Color theme name |
-| `--theme-file` | `""` | Custom theme JSON file path |
-| `--cover` | `true` | Generate cover page |
-| `--toc` | `true` | Generate table of contents |
-| `--page-size` | `A4` | Page size (A4 or Letter) |
-| `--frontispiece` | `""` | Full-page image after cover |
-| `--banner` | `""` | Back cover banner image |
-| `--header-title` | `""` | Report title in page header |
-| `--footer-left` | author | Brand/author in footer |
-| `--stats-line` | `""` | Stats on cover |
-| `--stats-line2` | `""` | Second stats line |
-| `--edition-line` | `""` | Edition line at cover bottom |
-| `--disclaimer` | `""` | Back cover disclaimer |
-| `--copyright` | `""` | Back cover copyright |
-| `--code-max-lines` | `30` | Max lines per code block |
+Most options can also be set in top-of-file YAML-style frontmatter. Explicit CLI
+arguments take precedence over frontmatter values.
+
+| Argument | Frontmatter Key | Default | Description |
+|----------|----------------|---------|-------------|
+| `--input` | — | (required) | Path to markdown file |
+| `--output` | — | `output.pdf` | Output PDF path |
+| `--title` | `title` | From first H1 | Document title for cover page |
+| `--subtitle` | `subtitle` | `""` | Subtitle text |
+| `--author` | `author` | `""` | Author name |
+| `--date` | `date` | Today | Date string |
+| `--version` | `version` | `""` | Version string for cover |
+| `--watermark` | `watermark` | `""` | Watermark text (empty = none) |
+| `--theme` | `theme` | `warm-academic` | Color theme name |
+| `--theme-file` | — | `""` | Custom theme JSON file path |
+| `--cover` | `cover` | `true` | Generate cover page |
+| `--toc` | `toc` | `true` | Generate table of contents |
+| `--page-size` | `page-size` | `A4` | Page size (A4 or Letter) |
+| `--frontispiece` | `frontispiece` | `""` | Full-page image after cover |
+| `--banner` | `banner` | `""` | Back cover banner image |
+| `--header-title` | `header-title` | `""` | Report title in page header |
+| `--footer-left` | `footer-left` | author | Brand/author in footer |
+| `--stats-line` | `stats-line` | `""` | Stats on cover |
+| `--stats-line2` | `stats-line2` | `""` | Second stats line |
+| `--edition-line` | `edition-line` | `""` | Edition line at cover bottom |
+| `--disclaimer` | `disclaimer` | `""` | Back cover disclaimer |
+| `--copyright` | `copyright` | `""` | Back cover copyright |
+| `--code-max-lines` | `code-max-lines` | `30` | Max lines per code block |
 
 ## Themes
 
@@ -201,4 +212,12 @@ Each theme defines: page background, ink color, accent color, faded text, border
 
 ```bash
 pip install reportlab --break-system-packages
+# Optional formula rendering:
+pip install matplotlib --break-system-packages
+```
+
+Recommended Ubuntu/Debian fonts:
+
+```bash
+sudo apt install fonts-dejavu-core fonts-liberation fonts-freefont-ttf fonts-noto fonts-noto-cjk fonts-noto-color-emoji
 ```
