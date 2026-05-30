@@ -1,5 +1,5 @@
 ---
-name: lovstudio:any2pdf
+name: lovstudio-any2pdf
 description: >
   Convert Markdown documents to professionally typeset PDF files with reportlab.
   Handles CJK/Latin mixed text, fenced code blocks, tables, blockquotes, Obsidian
