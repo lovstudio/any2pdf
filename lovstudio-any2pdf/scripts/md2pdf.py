@@ -892,7 +892,7 @@ class PDFBuilder:
         if sub_segs:
             c.setFillColor(T["ink_faded"]); _draw_mixed_segs(c, lx + 40*mm, btm - 62, sub_segs)
         elif sub:
-            c.setFillColor(T["ink_faded"]); _draw_mixed(c, lx, btm - 62, sub, 16, anchor="left")
+            c.setFillColor(T["ink_faded"]); _draw_mixed(c, lx, btm - 62, sub, 16, anchor="left", max_w=self.page_w - lx - 20*mm)
 
         stats = self.cfg.get("stats_line", "")
         stats2 = self.cfg.get("stats_line2", "")
@@ -1126,9 +1126,9 @@ class PDFBuilder:
         if header_title:
             _draw_mixed(c, self.lm, self.page_h - 18*mm, header_title, 8)
 
-        # Header right: "目  录"
-        c.setFont("CJK", 8)
-        c.drawRightString(self.page_w - self.rm, self.page_h - 18*mm, "\u76ee  \u5f55")
+        # Header right: "Contents"
+        c.setFont("Serif", 8)
+        c.drawRightString(self.page_w - self.rm, self.page_h - 18*mm, self.cfg.get("toc_title", "Contents"))
 
         # Footer
         c.setStrokeColor(T["border"])
@@ -1438,7 +1438,12 @@ class PDFBuilder:
                 else: in_code = True; code_buf = []
                 i += 1; continue
             if in_code: code_buf.append(line); i += 1; continue
-            if stripped in ('---','\\newpage','') or stripped.startswith(('title:','subtitle:','author:','date:')):
+            if stripped in ('---','\\newpage') or stripped.startswith(('title:','subtitle:','author:','date:')):
+                i += 1; continue
+
+            # Blank lines → vertical space
+            if not stripped:
+                story.append(Spacer(1, 1.5*mm))
                 i += 1; continue
 
             # Display math: $$ ... $$ or \[ ... \]
@@ -1576,7 +1581,7 @@ class PDFBuilder:
     def build_toc(self, toc):
         ST = self.ST; ah = self.accent_hex; ink = self.T["ink"]
         s = [Spacer(1, 15*mm)]
-        s.append(Paragraph(md_inline("\u76ee    \u5f55", ah), ST['part']))
+        s.append(Paragraph(md_inline(self.cfg.get("toc_title", "Contents"), ah), ST['part']))
         s.append(HRule(self.body_w * 0.12, 1, self.T["accent"]))
         s.append(Spacer(1, 8*mm))
         ink_hex = f"#{int(ink.red*255):02x}{int(ink.green*255):02x}{int(ink.blue*255):02x}" if hasattr(ink,'red') else "#181818"
@@ -1743,6 +1748,7 @@ def main():
     parser.add_argument("--theme-file", default=None, help="Custom theme JSON file path")
     parser.add_argument("--cover", default=None, type=lambda x: x.lower() != 'false', help="Generate cover page")
     parser.add_argument("--toc", default=None, type=lambda x: x.lower() != 'false', help="Generate TOC")
+    parser.add_argument("--toc-title", default=None, help="TOC page title (default: Contents)")
     parser.add_argument("--page-size", default=None, choices=["A4","Letter"], help="Page size")
     parser.add_argument("--frontispiece", default=None, help="Path to full-page image after cover")
     parser.add_argument("--banner", default=None, help="Path to back cover banner image")
@@ -1786,6 +1792,7 @@ def main():
         "accent_hex": accent_hex,
         "cover": args.cover if args.cover is not None else parse_bool(fm_get(frontmatter, "cover"), True),
         "toc": args.toc if args.toc is not None else parse_bool(fm_get(frontmatter, "toc"), True),
+        "toc_title": args.toc_title or fm_get(frontmatter, "toc-title", "toc_title", default="Contents"),
         "page_size": A4 if page_size == "A4" else LETTER,
         "frontispiece": args.frontispiece or fm_get(frontmatter, "frontispiece"),
         "banner": args.banner or fm_get(frontmatter, "banner"),
