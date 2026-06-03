@@ -145,7 +145,7 @@ Works with 25+ AI agents: Claude Code, Cursor, GitHub Copilot, Gemini CLI, Codex
 - **Obsidian callouts** — `> [!NOTE]`, warnings, tips, quotes, and related callout types
 - **LaTeX-style formulas** — inline `$...$` and display `$$...$$` / `\[...\]`; install `matplotlib` for rendered math images
 - **Emoji fallback** — Twemoji image rendering when online, with local emoji-font fallback when available
-- **YAML frontmatter** — set title, theme, watermark, cover, TOC, and other options inside the Markdown file
+- **YAML frontmatter** — set title, theme, watermark, cover, TOC title, TOC, and other options inside the Markdown file
 
 ## Direct CLI Usage
 

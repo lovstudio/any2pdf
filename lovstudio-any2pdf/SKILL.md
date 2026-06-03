@@ -189,6 +189,7 @@ arguments take precedence over frontmatter values.
 | `--theme-file` | — | `""` | Custom theme JSON file path |
 | `--cover` | `cover` | `true` | Generate cover page |
 | `--toc` | `toc` | `true` | Generate table of contents |
+| `--toc-title` | `toc-title` / `toc_title` | `Contents` | TOC page title text |
 | `--page-size` | `page-size` | `A4` | Page size (A4 or Letter) |
 | `--frontispiece` | `frontispiece` | `""` | Full-page image after cover |
 | `--banner` | `banner` | `""` | Back cover banner image |
