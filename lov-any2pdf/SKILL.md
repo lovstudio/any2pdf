@@ -19,13 +19,15 @@ compatibility: >
   macOS: uses Palatino, Songti SC, Menlo (pre-installed).
   Linux: uses DejaVu/Liberation/FreeFont/Noto, Noto CJK, Droid Sans Fallback,
   DejaVu Sans Mono, and Noto Emoji when available.
+depends_on:
+  - lov-branding-consistency
 metadata:
   author: contributors
-  version: "1.1.0"
+  version: "1.1.1"
   tags: markdown pdf cjk reportlab typesetting
 ---
 
-# any2pdf — Markdown to Professional PDF
+# PDF大师 · PDF Master
 
 This skill converts any Markdown file into a publication-quality PDF using Python's
 reportlab library. It was developed through extensive iteration on real Chinese
