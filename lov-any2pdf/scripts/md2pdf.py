@@ -1756,6 +1756,9 @@ def main():
     parser.add_argument("--code-max-lines", default=None, type=int, help="Max lines per code block before truncation")
     args = parser.parse_args()
 
+    if not os.path.isfile(args.input):
+        parser.error(f"Input file not found: {args.input}")
+
     with open(args.input, encoding='utf-8') as f:
         md_text = f.read()
 
